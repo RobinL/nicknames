@@ -1,6 +1,6 @@
 # Given-name and nickname relationships supported by Wikipedia
 
-Evidence snapshot: **3 October 2026**. Publication layout updated: **5 October 2026**.
+Evidence snapshot: **3 October 2026**. Publication layout updated: **5 October 2026**. Additional support snapshot: **5 October 2026**.
 
 This dataset contains **1,993 distinct given-name → nickname pairs**, each supported by **at least three distinct people under the project's Wikipedia validation rules**. English Wikipedia biographies provide the name evidence. Linked Wikidata identifiers support identity resolution and deduplication; Wikidata human-status checks are also part of the reverse-search method.
 
@@ -9,10 +9,10 @@ The repository contains three UTF-8 CSVs with ordinary text cells and no JSON fi
 | File | One row per | Rows | Key |
 |---|---|---:|---|
 | [nicknames.csv](nicknames.csv) | Qualifying given-name/nickname pair | 1,993 | `pair_id` |
-| [supporting_people.csv](supporting_people.csv) | Person supporting a pair, per validation record | 11,734 | `evidence_id` |
-| [provenance.csv](provenance.csv) | Technical provenance of a validation record | 11,734 | `evidence_id` |
+| [supporting_people.csv](supporting_people.csv) | Person supporting a pair, per validation record | 14,297 | `evidence_id` |
+| [provenance.csv](provenance.csv) | Technical provenance of a validation record | 14,297 | `evidence_id` |
 
-The evidence represents **11,067 distinct person–pair supports**, involving **10,892 different people**. Multiple records can describe one person, but that person contributes only one vote within a pair. Every supporting-person record has a Wikipedia URL and Wikidata person identifier.
+The evidence represents **13,630 distinct person–pair supports**, involving **13,367 different people**. Multiple records can describe one person, but that person contributes only one vote within a pair. Every supporting-person record has a Wikipedia URL and Wikidata person identifier.
 
 No repository-wide licence has been selected. The source notices below explain the existing terms for Wikipedia and Wikidata material; they do not apply MIT or another blanket licence to the compilation.
 
@@ -74,6 +74,10 @@ A reverse-qualified pair can include people originally found by recall. The pair
 
 Two retained pilot records display short introduction excerpts but have wider-context review methods. Qualification follows the recorded decision method, not excerpt length alone.
 
+## Additional supporting people
+
+After the initial export, cached Wikipedia biographies were checked against the published pairs for further distinct people. Later pair searches also looked for biographies whose titles contain the nickname and whose introductions contain the fuller name. New evidence uses the same first-100-words and subject-name checks, with Wikidata human status and person-ID deduplication. The pair-level qualification method stays as originally recorded; each new person's actual discovery and validation methods appear in the evidence and provenance CSVs.
+
 ## Deduplication and requests
 
 Pairs are pooled across files after normalizing NFC, case and whitespace. Accents and distinct spellings remain separate. Candidate naming-tradition descriptions are retained, but support is pooled across those descriptions: three people for a pair does not establish three people in every listed culture.
@@ -115,9 +119,11 @@ The readable discovery labels are:
 | `recalled_person` | Offline recalled person subsequently resolved to a biography |
 | `pair_search` | Full-run search using the name pair |
 | `cached_introduction` | Previously retrieved introduction checked against another pair |
+| `cached_cross_pair` | Cached biography checked against a published pair |
+| `cached_explicit_opening` | Cached biography with an explicit nickname in its opening name |
 | `pilot_pair_search` | Pair-driven discovery in the earlier feasibility experiment |
 
-The person-level `validation_method` values are `introduction_100_words`, `extended_subject_rule` and `extended_assistant_review`. These describe the evidence check; the same-named column in `nicknames.csv` describes the pair's qualification route. `review_status` distinguishes original lexical validation, automated subject checks and assistant-reviewed pilot evidence. The full technical method names remain in `provenance.csv`.
+The person-level `validation_method` values are `introduction_100_words`, `extended_subject_rule` and `extended_assistant_review`. These describe the evidence check; the same-named column in `nicknames.csv` describes the pair's qualification route. `review_status` distinguishes original lexical validation, automated subject checks and assistant-reviewed evidence. The full technical method names remain in `provenance.csv`.
 
 ### provenance.csv
 
@@ -170,7 +176,7 @@ Articles were retrieved as plain text, passages were selected, and introductions
 
 The source relationship and evidence snapshots in the research working project are `validation_reverse_20261002/outputs/validated_nickname_list.csv` and `validation_reverse_20261002/outputs/supporting_people_by_method.csv`.
 
-Export checks reconcile all 1,993 pair IDs, every supporting-person ID and all 11,734 retained Wikipedia records to those snapshots. They check the three-person threshold, method-specific qualification, unique keys, foreign-key joins, distinct-person counts, source URLs and UTF-8/CSV round trips. The three CSVs preserve the qualified pairs and their Wikipedia evidence without a fresh validation run.
+The initial export reconciled all 1,993 pair IDs and 11,734 Wikipedia records to those snapshots. Later Wikipedia research added 2,563 distinct person–pair supports. Merge checks preserve unique evidence IDs, one-to-one provenance joins, distinct-person counts and source URLs. The three CSVs retain both the original qualification evidence and later support.
 
 
 ## Exact prompt for the larger candidate list
